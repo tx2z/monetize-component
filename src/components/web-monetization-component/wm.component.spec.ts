@@ -1,19 +1,19 @@
 import 'jasmine';
-import BaseComponent from './base.component';
+import WmComponent from './wm.component';
 
-window.customElements.define('base-component', BaseComponent);
-describe('Base Component Spec:', () => {
+window.customElements.define('wm-component', WmComponent);
+describe('Wm Component Spec:', () => {
   let element: HTMLElement;
   let shadow: ShadowRoot;
   let styles: CSSStyleDeclaration;
   beforeEach(() => {
-    element = document.createElement('base-component');
+    element = document.createElement('wm-component');
     shadow = element.shadowRoot as ShadowRoot;
     styles = window.getComputedStyle(element);
     document.body.append(element);
   });
 
-  describe('the Base Component', () => {
+  describe('the Wm Component', () => {
     it('should contain shadow root', () => {
       expect(shadow).toBeDefined();
     });

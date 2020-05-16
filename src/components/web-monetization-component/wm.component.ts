@@ -1,10 +1,10 @@
-// import * as interfaces from './base.component.interfaces';
+// import * as interfaces from './wm.component.interfaces';
 import { prepareTemplate } from '../../helpers';
-import * as htmlTemplate from './base.component.html';
-import * as stylesheet from './base.component.css';
+import * as htmlTemplate from './wm.component.html';
+import * as stylesheet from './wm.component.css';
 
-/** The BaseComponent web component */
-export default class BaseComponent extends HTMLElement {
+/** The WmComponent web component */
+export default class WmComponent extends HTMLElement {
   private shadow: ShadowRoot;
 
   constructor() {

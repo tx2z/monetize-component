@@ -9,13 +9,12 @@ export default {
   parameters: {
     notes: { notes },
   },
-  title: 'Lit-html',
+  title: 'Wm',
 };
 
-export const lithtmlComponent = (): HTMLElement => {
+export const wmComponent = (): HTMLElement => {
   const dataAttribute = text('data-atribute', 'init');
-
-  const component = document.createElement('lithtml-component');
+  const component = document.createElement('wm-component');
   component.dataset.attribute = dataAttribute;
   return component;
 };
