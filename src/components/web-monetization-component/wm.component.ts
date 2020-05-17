@@ -1,4 +1,4 @@
-// import * as interfaces from './wm.component.interfaces';
+import { Pointer } from './wm.component.interfaces';
 import { prepareTemplate } from '../../helpers';
 import * as htmlTemplate from './wm.component.html';
 import * as stylesheet from './wm.component.css';
@@ -6,9 +6,22 @@ import * as stylesheet from './wm.component.css';
 /** The WmComponent web component */
 export default class WmComponent extends HTMLElement {
   private shadow: ShadowRoot;
+  private metaMonetization: HTMLMetaElement;
+  private pointers: Pointer[];
+  private pointerPosition = 0;
 
   constructor() {
     super();
+
+    // Add monetization metatag
+    if (typeof document !== 'undefined' /* && document.monetization*/) {
+      this.metaMonetization = document.createElement('meta');
+      this.metaMonetization.name = 'monetization';
+      // this.metaMonetization.content = '$wallet.example.com/sloan';
+      document.head.appendChild(this.metaMonetization);
+    } else {
+      console.log('no monetization support');
+    }
 
     // Add the main template to the component
     const templateElement = document.createElement('template');
@@ -18,7 +31,7 @@ export default class WmComponent extends HTMLElement {
 
     // Prepare template
     const templateVariables = {
-      hello: 'Hello There!',
+      title: 'web monetization component',
     };
     templateElement.innerHTML += prepareTemplate(htmlTemplate.default, templateVariables);
 
@@ -31,7 +44,7 @@ export default class WmComponent extends HTMLElement {
    * Define witch attribunes of the custom element need to be observed
    */
   static get observedAttributes(): string[] {
-    return ['data-attribute'];
+    return ['data-pointers'];
   }
 
   /**
@@ -41,9 +54,8 @@ export default class WmComponent extends HTMLElement {
    * @param newValue New value of the attribute
    */
   public attributeChangedCallback(attr: string, oldValue: string, newValue: string): void {
-    if (attr === 'data-attribute' && oldValue !== newValue) {
-      const testAttribute = this.shadow.getElementById('attributeValue') as HTMLElement;
-      testAttribute.innerHTML = newValue;
+    if (attr === 'data-pointers' && oldValue !== newValue) {
+      this.startMonetization(newValue);
     }
   }
 
@@ -99,5 +111,28 @@ export default class WmComponent extends HTMLElement {
       const testMessage = shadow.getElementById('testMessage') as HTMLElement;
       testMessage.innerHTML = 'You click the button!';
     }
+  }
+
+  private nextPointer(): void {
+    const pointer = this.pointers[this.pointerPosition];
+    this.metaMonetization.content = pointer.pointer;
+    if (this.pointerPosition === this.pointers.length - 1) {
+      this.pointerPosition = 0;
+    } else {
+      this.pointerPosition++;
+    }
+    this.setInterval(pointer.interval);
+  }
+
+  private setInterval(time: number): void {
+    setTimeout(() => this.nextPointer(), time);
+  }
+
+  private startMonetization(pointers: string): void {
+    // Get pointers from attribute
+    this.pointers = JSON.parse(pointers);
+
+    // Add pointer to metatag
+    this.nextPointer();
   }
 }
